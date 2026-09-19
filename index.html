@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para ti ❤️</title>
+  <style>
+    :root {
+      --bg: #0d0f18;
+      --card-bg: rgba(255, 255, 255, 0.06);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --accent: #ff4d6d;
+      --accent-glow: rgba(255, 77, 109, 0.35);
+      --text: #f0f2f5;
+      --text-muted: #a0a5b5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, var(--bg) 80%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.2rem;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* Partículas de fondo */
+    .bg-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .heart-particle {
+      position: absolute;
+      color: var(--accent);
+      opacity: 0.35;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(15deg); }
+    }
+
+    /* Tarjeta Glassmorphism */
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px var(--accent-glow);
+      text-align: center;
+    }
+
+    /* Vista 1: Entrada */
+    .hero-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+
+    .heart-icon {
+      font-size: 3.5rem;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px var(--accent)); }
+      50% { transform: scale(1.15); filter: drop-shadow(0 0 20px var(--accent)); }
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px var(--accent-glow);
+      transition: transform 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Vista 2: Contenido */
+    .letter-view {
+      display: none;
+      text-align: left;
+    }
+
+    .letter-view.active {
+      display: block;
+      animation: fadeIn 0.7s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .typing-text {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Reproductor de YouTube adaptado */
+    .music-container {
+      margin-top: 1.2rem;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .music-header {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Contador */
+    .counter-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .counter-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .counter-timer {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-particles" id="particles"></div>
+
+  <div class="container">
+    <!-- Pantalla inicial -->
+    <div class="hero-view" id="heroView">
+      <div class="heart-icon">💌</div>
+      <h1>Tengo algo para ti</h1>
+      <p class="subtitle">Preparé este pequeño detalle solo para ti. Toca el botón para abrirlo.</p>
+      <button class="btn" id="openBtn">Abrir con amor</button>
+    </div>
+
+    <!-- Pantalla con la carta y la canción -->
+    <div class="letter-view" id="letterView">
+      <h2 style="margin-bottom: 1rem; color: var(--accent);">Hola, mi amor 💞</h2>
+      
+      <!-- Mensaje con efecto de escritura -->
+      <div class="typing-text" id="typewriter"></div>
+
+      <!-- Canción: Ya Borracho de Herencia De Grandes -->
+      <div class="music-container">
+        <div class="music-header">Nuestra canción para este momento 🎶</div>
+        <div class="video-wrapper">
+          <iframe 
+            id="ytFrame"
+            src="" 
+            title="Ya Borracho - Herencia De Grandes" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <!-- Contador de tiempo -->
+      <div class="counter-box">
+        <div class="counter-title">Juntos desde hace:</div>
+        <div class="counter-timer" id="timer">Calculando...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. FECHA DE ANIVERSARIO (Año, Mes [0=Enero, 8=Sept, etc.], Día)
+    // Modifica aquí la fecha en que iniciaron:
+    const startDate = new Date(2026, 8, 31); 
+
+    // 2. TEXTO DE LA DEDICATORIA (Puedes editarlo a tu gusto)
+    const mensaje = 
+`Quería prepararte algo diferente hoy para recordarte lo mucho que significas para mí, feliz dia del amor y la amistad💞💞.
+
+Gracias por cada momento, cada risa y por acompañarme siempre. Eres una persona increíble y tenerte a mi lado hace todo mejor.
+
+Te quiero muchísimo 💞`;
+
+    // 3. EVENTO DE APERTURA
+    const openBtn = document.getElementById('openBtn');
+    const heroView = document.getElementById('heroView');
+    const letterView = document.getElementById('letterView');
+    const ytFrame = document.getElementById('ytFrame');
+
+    openBtn.addEventListener('click', () => {
+      heroView.style.display = 'none';
+      letterView.classList.add('active');
+
+      // Carga el video de "Ya Borracho" con autoplay activado tras el toque
+      ytFrame.src = "https://www.youtube.com/embed/7SsmyjVF1Oo?autoplay=1&rel=0";
+
+      startTypewriter(mensaje);
+      startCounter();
+    });
+
+    // 4. MÁQUINA DE ESCRIBIR
+    function startTypewriter(text) {
+      const typewriterEl = document.getElementById('typewriter');
+      let i = 0;
+      typewriterEl.textContent = '';
+      const timer = setInterval(() => {
+        if (i < text.length) {
+          typewriterEl.textContent += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(timer);
+        }
+      }, 35);
+    }
+
+    // 5. CONTADOR DE TIEMPO
+    function updateCounter() {
+      const now = new Date();
+      const diff = now - startDate;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('timer').textContent = 
+        `${days} días, ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    function startCounter() {
+      updateCounter();
+      setInterval(updateCounter, 1000);
+    }
+
+    // 6. CORAZONES FLOTANTES
+    const particlesContainer = document.getElementById('particles');
+    const icons = ['❤️', '✨', '💖', '🌸'];
+
+    for (let i = 0; i < 14; i++) {
+      const particle = document.createElement('span');
+      particle.className = 'heart-particle';
+      particle.textContent = icons[Math.floor(Math.random() * icons.length)];
+      particle.style.left = `${Math.random() * 100}vw`;
+      particle.style.top = `${Math.random() * 100}vh`;
+      particle.style.fontSize = `${Math.random() * 14 + 14}px`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
+      particle.style.animationDuration = `${Math.random() * 3 + 4}s`;
+      particlesContainer.appendChild(particle);
+    }
+  </script>
+</body>
+</html>
